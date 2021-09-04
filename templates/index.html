@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Sentimental Analysis - Assignment 3</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.18/css/jquery.dataTables.min.css"/>
+  <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+  <script src="https://cdn.datatables.net/1.10.18/js/jquery.dataTables.min.js"></script>
+  <style>
+    /* The Modal (background) */
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Sit on top */
+      padding-top: 100px; /* Location of the box */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgb(0,0,0); /* Fallback color */
+      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+    
+    /* Modal Content */
+    .modal-content {
+      background-color: #fefefe;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+    }
+    
+    /* The Close Button */
+    .close {
+      color: #aaaaaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    
+    .close:hover,
+    .close:focus {
+      color: #000;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    * {box-sizing: border-box;}
+
+    body { 
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .header {
+    overflow: hidden;
+    background-color: #f1f1f1;
+    padding: 20px 10px;
+    }
+
+    .header a {
+    float: left;
+    color: black;
+    text-align: center;
+    padding: 12px;
+    text-decoration: none;
+    font-size: 18px; 
+    line-height: 25px;
+    border-radius: 4px;
+    }
+
+    .header a.logo {
+    font-size: 25px;
+    font-weight: bold;
+    }
+
+    .header a:hover {
+    background-color: #ddd;
+    color: black;
+    }
+
+    .header a.active {
+    background-color: dodgerblue;
+    color: white;
+    }
+
+    .header-right {
+    float: right;
+    }
+
+    @media screen and (max-width: 500px) {
+    .header a {
+        float: none;
+        display: block;
+        text-align: left;
+    }
+    
+    .header-right {
+        float: none;
+    }
+    }
+    
+    input[type=text], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    }
+
+    input[type=submit] {
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    }
+
+    input[type=submit]:hover {
+    background-color: #45a049;
+    }
+
+    div {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+    }
+    </style>
+</head>
+<body>
+<div class="header">
+    <a href="/" class="logo">Assignment 3 - Social Data Mining Techniques</a>
+    <div class="header-right">
+      <a class="active" href="/">Home</a>
+      <a href="/scrape">Scrape</a>
+      <a href="/about">About</a>
+    </div>
+  </div><br>
+  <h1>New York Times</h1>
+  <table id="newstable1" class="display" style="width:100%">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Article Link</th>
+                <th>Date</th>
+                <th>Polarity</th>
+                <th>Sentiment</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+              <th>Title</th>
+              <th>Description</th>
+              <th>Article Link</th>
+              <th>Date</th>
+              <th>Polarity</th>
+              <th>Sentiment</th>
+            </tr>
+        </tfoot>
+    </table>
+    <h1>CBS News</h1>
+    <table id="newstable2" class="display" style="width:100%">
+      <thead>
+          <tr>
+              <th>Title</th>
+              <th>Description</th>
+              <th>Article Link</th>
+              <th>Date</th>
+              <th>Polarity</th>
+              <th>Sentiment</th>
+          </tr>
+      </thead>
+      <tfoot>
+          <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Article Link</th>
+            <th>Date</th>
+            <th>Polarity</th>
+            <th>Sentiment</th>
+          </tr>
+      </tfoot>
+  </table>
+<script>
+function setupData() {
+    $(document).ready(function () {
+      //https://datatables.net/ plugin
+        var table1 = $('#newstable1').DataTable({
+            "ajax": {
+                "url": "/getData-nyt", //run get
+                "dataType": "json",
+                "dataSrc": "data",
+                "contentType":"application/json",
+            },
+            "columns": [
+                {"data": "title"},
+                {"data": "description"},
+                {"data": "link"},
+                {"data": "date"},
+                {"data": "polarity"},
+                {"data": "sentiment"}
+            ],
+            
+        });
+        var table2 = $('#newstable2').DataTable({
+            "ajax": {
+                "url": "/getData-cbs", //run get
+                "dataType": "json",
+                "dataSrc": "data",
+                "contentType":"application/json",
+            },
+            "columns": [
+                {"data": "title"},
+                {"data": "description"},
+                {"data": "link"},
+                {"data": "date"},
+                {"data": "polarity"},
+                {"data": "sentiment"}
+            ],
+            
+        });
+      
+    });
+}
+$( window ).on( "load", setupData );
+</script>
+<script>
+    
+</script>
+</body>
+</html>
