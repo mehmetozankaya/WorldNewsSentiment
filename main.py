@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Fri Mar 19 00:28:00 2021
 
-@author: kelvin
 """
 #import required libraries
 from flask import Flask, render_template, json, jsonify, Response, request, redirect
